@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pregnancy prep timeline</title>
+<meta name="description" content="A sourced timeline of what to start, stop and take before conception, during pregnancy and after birth, for mothers and fathers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --ink: #1d2331;
+  --muted: #5a6373;
+  --line: #dde3e1;
+  --grid: #e9edec;
+  --pre: #dff0e7;
+  --preg: #ebe5f7;
+  --post: #f9e8db;
+  --c-supplements: #2b8a5f;
+  --c-avoid: #c23a5d;
+  --c-nutrition: #b2731a;
+  --c-activity: #2a6db0;
+  --c-lifestyle: #17807f;
+  --c-vaccines: #6b4cb3;
+  --c-checks: #4a6773;
+  --marker: #1d2331;
+  --today: #d9531b;
+  --focus: #2a6db0;
+  --label-w: 270px;
+  --row-h: 48px;
+  --radius: 7px;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151b;
+    --surface: #1a1e26;
+    --ink: #e7eaf0;
+    --muted: #9ba4b3;
+    --line: #2b313c;
+    --grid: #232832;
+    --pre: #1b2b24;
+    --preg: #252036;
+    --post: #2f241c;
+    --c-supplements: #3fae7d;
+    --c-avoid: #e0577a;
+    --c-nutrition: #d4952f;
+    --c-activity: #4a90d6;
+    --c-lifestyle: #2fa8a6;
+    --c-vaccines: #9174d8;
+    --c-checks: #7593a0;
+    --marker: #e7eaf0;
+    --today: #f07a45;
+    --focus: #7db4ee;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Header ---------- */
+.masthead { padding: 40px 0 8px; }
+.masthead h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  max-width: 16ch;
+}
+.masthead p { margin: 0 0 8px; max-width: 68ch; color: var(--muted); font-size: 1.05rem; }
+
+/* ---------- Controls ---------- */
+.controls {
+  display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end;
+  padding: 20px 0 16px;
+}
+.who {
+  display: inline-flex; padding: 5px; gap: 4px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+}
+.who button {
+  font: 700 1.05rem var(--font-display);
+  border: 0; border-radius: 999px; padding: 10px 26px; cursor: pointer;
+  background: transparent; color: var(--muted);
+}
+.who button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field > span { font-size: .85rem; color: var(--muted); }
+.field .row { display: flex; gap: 6px; flex-wrap: wrap; }
+select, input[type="date"], .btn-plain {
+  font: inherit; font-size: .95rem; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 8px 10px; min-height: 40px;
+}
+.btn-plain { cursor: pointer; }
+.btn-plain[hidden] { display: none; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 14px; }
+.chip {
+  font: inherit; font-size: .9rem; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px 6px 9px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.chip .dot { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+.chip[aria-pressed="false"] { color: var(--muted); background: transparent; }
+.chip[aria-pressed="false"] .dot { background: transparent; box-shadow: inset 0 0 0 2px var(--c); }
+
+/* ---------- Chart ---------- */
+.chart-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  overflow: hidden;
+}
+.scroller { overflow-x: auto; overscroll-behavior-x: contain; }
+.chart { position: relative; min-width: calc(var(--label-w) + 840px); }
+
+.row {
+  display: grid; grid-template-columns: var(--label-w) 1fr;
+  min-height: var(--row-h); border-top: 1px solid var(--grid);
+}
+.row:first-child { border-top: 0; }
+.cell-label {
+  position: sticky; left: 0; z-index: 3;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  padding: 7px 14px 7px 16px;
+  display: flex; flex-direction: column; justify-content: center; gap: 1px;
+  min-width: 0;
+}
+.cell-track { position: relative; min-width: 0; }
+
+/* axis rows */
+.axis .cell-label { font-size: .78rem; color: var(--muted); justify-content: center; }
+.axis { min-height: 0; }
+.axis.phase { height: 40px; }
+.axis.tri { height: 24px; }
+.axis.ticks { height: 28px; border-bottom: 1px solid var(--line); }
+.axis.cal { height: 28px; }
+.band {
+  position: absolute; top: 0; bottom: 0;
+  display: flex; align-items: center; padding-left: 10px;
+  font: 700 .95rem var(--font-display); white-space: nowrap; overflow: hidden;
+}
+.band.pre { background: var(--pre); }
+.band.preg { background: var(--preg); padding-left: 16px; }
+.band.post { background: var(--post); }
+.tri .band { font: 400 .78rem var(--font-body); color: var(--muted); background: transparent; border-left: 1px solid var(--line); padding-left: 14px; }
+.axis.phase .cell-track { z-index: 2; }
+.tick {
+  position: absolute; top: 0; bottom: 0; transform: translateX(-50%);
+  font-size: .75rem; color: var(--muted); display: flex; align-items: center;
+  white-space: nowrap;
+}
+.cal .tick { transform: none; padding-left: 4px; border-left: 1px solid var(--line); line-height: 1.1; flex-direction: column; align-items: flex-start; justify-content: center; }
+.cal .tick b { font-weight: 700; color: var(--ink); font-size: .7rem; }
+
+/* overlay lines */
+.overlay {
+  position: absolute; top: 0; bottom: 0; left: var(--label-w); right: 0;
+  pointer-events: none; z-index: 1;
+}
+.vline { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid var(--grid); }
+.vline.phase-edge { border-left: 1px solid var(--line); }
+.vline.marker { border-left: 2px dashed var(--marker); opacity: .55; }
+.vline.marker.solid { border-left-style: solid; }
+.vline.today { border-left: 2px solid var(--today); opacity: 1; }
+.axis.markers { height: 34px; border-top: 1px solid var(--line); }
+.flag-tick {
+  position: absolute; top: 7px; margin-left: 5px; z-index: 2;
+  font-size: .74rem; font-weight: 700; white-space: nowrap;
+  background: var(--surface); padding: 1px 7px; border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.flag-tick.right { transform: translateX(-100%); margin-left: -5px; }
+.flag-tick.today { color: var(--today); border-color: var(--today); top: 31px; }
+.axis.markers.has-today { height: 58px; }
+
+/* item rows */
+.item-title {
+  font: inherit; font-size: .93rem; font-weight: 700; line-height: 1.25;
+  text-align: left; padding: 0; border: 0; background: none; color: var(--ink);
+  cursor: pointer;
+}
+.item-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+.item-src { font-size: .78rem; color: var(--muted); text-decoration: none; display: inline-flex; gap: 4px; }
+.item-src:hover { color: var(--ink); text-decoration: underline; }
+.item-src svg { width: 11px; height: 11px; margin-top: 3px; }
+
+.bar-wrap { position: absolute; top: 50%; height: 24px; transform: translateY(-50%); z-index: 2; }
+.bar {
+  position: absolute; top: 0; bottom: 0;
+  border: 0; padding: 0 8px; margin: 0; cursor: pointer;
+  background: var(--c); color: #fff;
+  border-radius: var(--radius);
+  font: 700 .76rem var(--font-body);
+  display: flex; align-items: center; white-space: nowrap; overflow: hidden;
+  min-width: 6px;
+}
+.bar:hover { filter: brightness(1.08); }
+.bar.nolabel .bar-text { visibility: hidden; }
+.bar.conditional {
+  background: repeating-linear-gradient(-45deg, var(--c) 0 7px, color-mix(in srgb, var(--c) 55%, var(--surface)) 7px 13px);
+  outline: 1.5px dashed var(--c); outline-offset: 1px;
+}
+.bar.conditional .bar-text { background: var(--c); padding: 0 5px; border-radius: 4px; }
+.soft {
+  position: absolute; top: 3px; bottom: 3px; pointer-events: none; opacity: .55;
+}
+.soft.start { background: linear-gradient(to right, transparent, var(--c)); border-radius: var(--radius) 0 0 var(--radius); }
+.soft.end { background: linear-gradient(to left, transparent, var(--c)); border-radius: 0 var(--radius) var(--radius) 0; }
+
+.empty { padding: 28px 16px; color: var(--muted); }
+
+/* ---------- Legend + notes ---------- */
+.below { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 22px 0 8px; }
+.legend { display: flex; flex-direction: column; gap: 10px; font-size: .9rem; color: var(--muted); }
+.legend div { display: flex; align-items: center; gap: 10px; }
+.swatch { width: 44px; height: 16px; border-radius: 5px; flex: none; position: relative; --c: var(--muted); }
+.swatch.solid { background: var(--c); }
+.swatch.fade { background: linear-gradient(to right, transparent, var(--c)); opacity: .55; }
+.swatch.cond { background: repeating-linear-gradient(-45deg, var(--c) 0 6px, transparent 6px 11px); outline: 1.5px dashed var(--c); outline-offset: 1px; }
+.swatch.line { width: 44px; height: 16px; background: none; }
+.swatch.line::after { content: ""; position: absolute; left: 21px; top: -2px; bottom: -2px; border-left: 2px dashed var(--marker); opacity: .6; }
+.notes { font-size: .9rem; color: var(--muted); }
+.notes p { margin: 0 0 10px; max-width: 70ch; }
+.notes strong { color: var(--ink); }
+
+footer { padding: 24px 0 48px; font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); margin-top: 24px; }
+footer p { margin: 0 0 8px; max-width: 80ch; }
+
+/* ---------- Dialog ---------- */
+dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  border: 1px solid var(--line); border-radius: 14px; padding: 0;
+  background: var(--surface); color: var(--ink);
+  box-shadow: 0 24px 60px rgba(10, 14, 24, .25);
+}
+dialog::backdrop { background: rgba(14, 18, 28, .45); }
+.dlg { padding: 22px 24px 24px; border-top: 6px solid var(--c); }
+.dlg-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.dlg-cat { font-size: .82rem; font-weight: 700; color: var(--c); }
+.dlg h2 { font: 800 1.45rem/1.15 var(--font-display); margin: 4px 0 12px; letter-spacing: -0.01em; }
+.dlg .when { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin: 0 0 14px; font-size: .95rem; }
+.dlg .when .dates { display: block; color: var(--muted); font-size: .85rem; margin-top: 2px; }
+.dlg p { margin: 0 0 12px; }
+.dlg .note { border-left: 3px solid var(--c); padding-left: 12px; color: var(--muted); font-size: .92rem; }
+.dlg .cond-flag { font-weight: 700; color: var(--c-avoid); }
+.dlg h3 { font: 700 .95rem var(--font-display); margin: 18px 0 6px; }
+.dlg ul { margin: 0; padding-left: 18px; }
+.dlg li { margin-bottom: 4px; }
+.close {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 999px; width: 36px; height: 36px; font-size: 1.2rem; cursor: pointer; flex: none;
+}
+
+@media (max-width: 760px) {
+  :root { --label-w: 168px; --row-h: 54px; }
+  .wrap { padding: 0 16px; }
+  .masthead { padding-top: 28px; }
+  .below { grid-template-columns: 1fr; }
+  .cell-label { padding: 6px 10px; }
+  .item-title { font-size: .84rem; }
+  .who button { padding: 9px 20px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  dialog[open] { animation: pop .16s ease-out; }
+  @keyframes pop { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+@media print {
+  .controls, .filters { display: none; }
+  .scroller { overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1>What to start, stop and take — and when</h1>
+    <p>A timeline of evidence-based measures for the months before conception, the 40 weeks of pregnancy and the first six months after birth. Click any bar for details; every item links to the guidance it comes from.</p>
+  </header>
+
+  <div class="controls">
+    <div class="who" role="tablist" aria-label="Whose timeline">
+      <button role="tab" id="tab-mother" data-who="mother" aria-selected="true">Mother</button>
+      <button role="tab" id="tab-father" data-who="father" aria-selected="false">Father</button>
+    </div>
+
+    <label class="field">
+      <span>Show real dates (optional)</span>
+      <span class="row">
+        <select id="anchor-type" aria-label="Date type">
+          <option value="due">Due date</option>
+          <option value="conception">Conception date</option>
+          <option value="trying">Start of trying</option>
+        </select>
+        <input type="date" id="anchor-date" aria-label="Date">
+        <button class="btn-plain" id="anchor-clear" type="button" hidden>Clear</button>
+      </span>
+    </label>
+  </div>
+
+  <div class="filters" id="filters" aria-label="Filter by category"></div>
+
+  <div class="chart-card">
+    <div class="scroller" id="scroller">
+      <div class="chart" id="chart" role="table" aria-label="Timeline of measures"></div>
+    </div>
+  </div>
+
+  <section class="below">
+    <div class="legend" aria-label="How to read the chart">
+      <div><span class="swatch solid"></span>Recommended window</div>
+      <div><span class="swatch fade"></span>Start earlier if you can, or an alternative window used in some countries</div>
+      <div><span class="swatch cond"></span>Only if your doctor advises it</div>
+      <div><span class="swatch line"></span>Conception (≈ week 2) and due date (week 40)</div>
+    </div>
+    <div class="notes">
+      <p><strong>How weeks are counted.</strong> Pregnancy weeks run from the first day of the last period, as doctors count them, so conception happens around week 2 and the due date is week 40.</p>
+      <p><strong>About “trying”.</strong> Bars that start “when you start trying” assume about three months of trying before conception. If you enter a “start of trying” date above, read the chart against your own dates.</p>
+      <p><strong>Guidance differs by country.</strong> Sources are mostly UK (NHS, NICE) and US (CDC, ACOG, USPSTF). Where they disagree on timing, the item says so. Your own midwife or doctor's advice comes first.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>General information, not medical advice. It doesn't cover individual conditions, medicines or high-risk pregnancies, and recommendations change. Talk to your doctor or midwife before starting supplements or making changes.</p>
+    <p>Sources last checked: October 2026.</p>
+  </footer>
+</div>
+
+<dialog id="detail" aria-labelledby="dlg-title">
+  <div class="dlg" id="dlg">
+    <div class="dlg-top">
+      <div>
+        <div class="dlg-cat" id="dlg-cat"></div>
+        <h2 id="dlg-title"></h2>
+      </div>
+      <button class="close" id="dlg-close" aria-label="Close">×</button>
+    </div>
+    <div class="when" id="dlg-when"></div>
+    <div id="dlg-body"></div>
+    <h3>Sources</h3>
+    <ul id="dlg-sources"></ul>
+  </div>
+</dialog>
+
+<script>
+/* =====================================================================
+   DATA — edit here.
+   Weeks: 0 = first day of last period; conception ≈ week 2; due date = 40.
+   Negative weeks = before pregnancy (−13 ≈ 3 months). 40–66 = first 6 months after birth.
+   Fields:
+     start/end    solid bar (weeks)
+     softStart    optional faded lead-in ("start earlier if you can" / alternative window)
+     softEnd      optional faded tail
+     conditional  true = only if a doctor advises it (hatched)
+     when         plain-language timing shown in the details
+     sources      first one is shown under the title in the chart
+   ===================================================================== */
+
+const SRC = {
+  nhsVitamins:   { name: "NHS — Vitamins, supplements and nutrition in pregnancy", short: "NHS", url: "https://www.nhs.uk/pregnancy/keeping-well/vitamins-supplements-and-nutrition/" },
+  nhsFoods:      { name: "NHS — Foods to avoid in pregnancy", short: "NHS", url: "https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/" },
+  nhsSmoking:    { name: "NHS — Stop smoking in pregnancy", short: "NHS", url: "https://www.nhs.uk/pregnancy/keeping-well/stop-smoking" },
+  nhsDad:        { name: "NHS — How can I improve my chances of becoming a dad?", short: "NHS", url: "https://www.nhs.uk/CHQ/Pages/1909.aspx" },
+  nhsTogether:   { name: "NHS Healthier Together — Smoking (new parent and baby)", short: "NHS", url: "https://www.healthiertogether.nhs.uk/new-parent-and-baby/smoking" },
+  nhsPelvic:     { name: "NHS Wales (BCUHB) — Pelvic floor exercises", short: "NHS Wales", url: "https://bcuhb.nhs.wales/health-advice/best-start/pelvic-floor-exercises/" },
+  nice:          { name: "NICE NG257 (2026) — Advice about factors that can affect fertility", short: "NICE", url: "https://www.nice.org.uk/guidance/NG257/chapter/advice-about-factors-that-can-affect-fertility" },
+  govukVacc:     { name: "GOV.UK — National vaccination campaign to protect newborns (2025)", short: "GOV.UK", url: "https://www.gov.uk/government/news/national-vaccination-campaign-to-protect-newborns-this-winter" },
+  cdcAlcohol:    { name: "CDC — About alcohol use during pregnancy", short: "CDC", url: "https://www.cdc.gov/alcohol-pregnancy/about/index.html" },
+  cdcAlcoholBF:  { name: "CDC — Alcohol and breastfeeding", short: "CDC", url: "https://www.cdc.gov/breastfeeding-special-circumstances/hcp/vaccine-medication-drugs/alcohol.html" },
+  cdcFlu:        { name: "CDC — Flu vaccine safety and pregnancy", short: "CDC", url: "https://www.cdc.gov/flu/vaccine-safety/vaccine-pregnant.html" },
+  cdcTdap:       { name: "CDC — Vaccinating pregnant patients (whooping cough)", short: "CDC", url: "https://www.cdc.gov/pertussis/pregnant/hcp/pregnant-patients.html" },
+  cdcRsv:        { name: "CDC — RSV vaccine guidance for pregnant women", short: "CDC", url: "https://www.cdc.gov/rsv/hcp/vaccine-clinical-guidance/pregnant-people.html" },
+  cdcFamily:     { name: "CDC — Vaccines for family and caregivers", short: "CDC", url: "https://www.cdc.gov/vaccines/pregnancy/family-caregivers.html" },
+  cdcRubella:    { name: "CDC MMWR — Revised advice on avoiding pregnancy after rubella vaccine", short: "CDC", url: "https://www.cdc.gov/MMWR/preview/MMWRhtml/mm5049a5.htm" },
+  immunizeMmr:   { name: "Immunize.org — MMR: pregnancy and postpartum considerations", short: "Immunize.org", url: "https://www.immunize.org/ask-experts/topic/mmr/pregnancy-postpartum-considerations/" },
+  ataIodine:     { name: "American Thyroid Association — Statement on iodine intake", short: "ATA", url: "https://www.thyroid.org/ata-statement-on-the-potential-risks-of-excess-iodine-ingestion-and-exposure" },
+  ataIodine3m:   { name: "Gupta et al. (2018), Nutrients — summary of ATA advice to start 3 months before conception", short: "Nutrients", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5946207" },
+  tommysVitD:    { name: "Tommy's — Folic acid and vitamin D before pregnancy", short: "Tommy's", url: "https://www.tommys.org/node/895" },
+  tommysMale:    { name: "Tommy's — How to improve male fertility", short: "Tommy's", url: "https://www.tommys.org/pregnancy-information/planning-a-pregnancy/are-you-ready-to-conceive/how-improve-male-fertility" },
+  yourFertility: { name: "Your Fertility (Australian Government-funded) — Pre-conception checklist for men", short: "Your Fertility", url: "https://www.yourfertility.org.au/sites/default/files/2020-10/Pre-conception%20Checklist%20for%20Men.pdf" },
+  fdaFish:       { name: "FDA & EPA — Advice about eating fish", short: "FDA", url: "https://www.fda.gov/food/constituent-updates/fda-and-epa-issue-fish-consumption-advice" },
+  mtbExercise:   { name: "MotherToBaby — Exercise in pregnancy (summarises ACOG guidance)", short: "MotherToBaby", url: "https://mothertobaby.org/fact-sheets/exercise-pregnancy/" },
+  uspstfAspirin: { name: "USPSTF — Low-dose aspirin to prevent preeclampsia (AAFP summary)", short: "USPSTF", url: "https://www.aafp.org/afp/2015/0301/od1" },
+  uspstfAspirin21:{ name: "AAFP — USPSTF reaffirms low-dose aspirin recommendation (2021)", short: "AAFP", url: "https://www.aafp.org/about/news/20211007uspstfpreeclampsia" },
+  uspstfGdm:     { name: "USPSTF — Screening for gestational diabetes (AAFP summary)", short: "USPSTF", url: "https://www.aafp.org/afp/2014/1201/od1" },
+  nswSleep:      { name: "NSW Health — Maternal sleep position in late pregnancy", short: "NSW Health", url: "https://www.health.nsw.gov.au/kidsfamilies/MCFhealth/maternity/Pages/side-sleeping-clinicians.aspx" },
+  modCheckup:    { name: "March of Dimes — Preconception checkups: why they're important", short: "March of Dimes", url: "https://marchofdimes.org/find-support/blog/preconception-checkups-why-theyre-important" },
+};
+
+const CATEGORIES = {
+  supplements: { label: "Supplements" },
+  avoid:       { label: "Cut out or limit" },
+  nutrition:   { label: "Diet" },
+  activity:    { label: "Exercise" },
+  lifestyle:   { label: "Lifestyle" },
+  vaccines:    { label: "Vaccines" },
+  checks:      { label: "Medical" },
+};
+
+const ITEMS = [
+  /* ------------------------------ MOTHER ------------------------------ */
+  { who: "mother", cat: "checks", title: "Pre-pregnancy check-up",
+    start: -26, end: -13,
+    when: "Any time in the year before trying; ideally at least 3 months before you start.",
+    detail: "Go over long-term conditions, regular medicines, vaccinations, weight and family history with a doctor or midwife, so anything that needs changing can be sorted before you conceive.",
+    sources: [SRC.modCheckup] },
+
+  { who: "mother", cat: "vaccines", title: "Check rubella (MMR) immunity",
+    start: -26, end: -4,
+    when: "Before trying. If you need an MMR dose, wait at least 4 weeks after it before trying to conceive.",
+    detail: "Rubella in early pregnancy can seriously harm the baby. MMR is a live vaccine and isn't given during pregnancy, so immunity is checked and topped up beforehand. US guidance is to avoid becoming pregnant for 28 days after the vaccine.",
+    sources: [SRC.immunizeMmr, SRC.cdcRubella] },
+
+  { who: "mother", cat: "lifestyle", title: "Work towards a healthy weight",
+    start: -26, end: 0,
+    when: "In the months before trying.",
+    detail: "A BMI of 30 or more is linked to taking longer to conceive; a BMI under 18.5 with irregular or absent periods can also reduce fertility. NICE notes that group programmes combining exercise and diet advice lead to more pregnancies than weight-loss advice alone.",
+    sources: [SRC.nice] },
+
+  { who: "mother", cat: "avoid", title: "Stop smoking; avoid second-hand smoke",
+    start: -26, end: 66,
+    when: "Before trying, throughout pregnancy and after the birth.",
+    detail: "Smoking is likely to reduce fertility, and passive smoking may affect your chance of conceiving too. In pregnancy it harms the baby's growth and development. The NHS says nicotine replacement therapy can be used in pregnancy if you can't stop without it; stop-smoking tablets aren't recommended.",
+    sources: [SRC.nice, SRC.nhsSmoking] },
+
+  { who: "mother", cat: "avoid", title: "No alcohol",
+    start: -13, end: 40,
+    when: "From when you start trying (stop contraception) until the birth. The bar assumes about 3 months of trying.",
+    detail: "There's no known safe amount of alcohol and no safe time to drink in pregnancy, including before you know you're pregnant (often 4–6 weeks in). The CDC says not to drink while trying, and NICE says the safest approach when trying to conceive is to avoid alcohol altogether.",
+    sources: [SRC.cdcAlcohol, SRC.nice] },
+
+  { who: "mother", cat: "avoid", title: "Alcohol while breastfeeding: none is safest",
+    start: 40, end: 66,
+    when: "While breastfeeding.",
+    detail: "Not drinking is the safest option. Up to one standard drink a day isn't known to harm the baby, especially if you wait at least 2 hours after a single drink before feeding. More than one drink a day isn't recommended.",
+    sources: [SRC.cdcAlcoholBF] },
+
+  { who: "mother", cat: "supplements", title: "Folic acid 400 µg daily",
+    softStart: -13, start: -4, end: 12,
+    when: "From before you're pregnant until the end of week 12. Many NHS services suggest starting about 3 months ahead.",
+    detail: "Reduces the risk of neural tube defects such as spina bifida. If you didn't take it before conceiving, start as soon as you know you're pregnant. Some people need a higher 5 mg dose on prescription (for example with diabetes, anti-epilepsy medicine, or a personal or family history of neural tube defects).",
+    sources: [SRC.nhsVitamins] },
+
+  { who: "mother", cat: "supplements", title: "Iodine 150 µg daily",
+    start: -13, end: 66,
+    when: "From about 3 months before trying, through pregnancy and breastfeeding.",
+    detail: "The baby's brain development depends on the mother's thyroid hormone, which needs iodine. The American Thyroid Association recommends a supplement with 150 µg iodine (as potassium iodide) before conception, in pregnancy and while breastfeeding. Avoid kelp or iodine supplements above 500 µg a day.",
+    note: "Advice differs by country — the NHS, for example, doesn't routinely recommend an iodine supplement. Check with your doctor, particularly if you have a thyroid condition.",
+    sources: [SRC.ataIodine, SRC.ataIodine3m] },
+
+  { who: "mother", cat: "supplements", title: "Vitamin D 10 µg (400 IU) daily",
+    softStart: -13, start: 0, end: 66,
+    when: "During pregnancy and breastfeeding — the NHS says at least September to March, or all year if you have dark skin or rarely get sun. Tommy's suggests taking it while trying, too.",
+    detail: "Vitamin D regulates calcium and phosphate for healthy bones, teeth and muscles. Don't take more than 100 µg (4,000 IU) a day.",
+    sources: [SRC.nhsVitamins, SRC.tommysVitD] },
+
+  { who: "mother", cat: "avoid", title: "No vitamin A (retinol) supplements or liver",
+    softStart: -4, start: 0, end: 40,
+    when: "Throughout pregnancy — worth checking your multivitamin label while trying.",
+    detail: "Too much vitamin A can harm the baby. Avoid cod liver oil, supplements containing retinol, and liver or liver products such as pâté.",
+    sources: [SRC.nhsVitamins, SRC.nhsFoods] },
+
+  { who: "mother", cat: "avoid", title: "Caffeine under 200 mg a day",
+    softStart: -4, start: 0, end: 40,
+    when: "Throughout pregnancy.",
+    detail: "Regularly having more than 200 mg a day raises the risk of low birthweight and miscarriage. A mug of instant coffee has roughly 100 mg; tea, cola, energy drinks and chocolate count too.",
+    sources: [SRC.nhsFoods] },
+
+  { who: "mother", cat: "nutrition", title: "Food safety: avoid listeria and toxoplasma risks",
+    start: 0, end: 40,
+    when: "Throughout pregnancy.",
+    detail: "Avoid raw or undercooked meat, unpasteurised dairy, mould-ripened and soft blue cheeses unless cooked until steaming hot, all pâté, raw shellfish, and cold cured meats unless thoroughly cooked.",
+    sources: [SRC.nhsFoods] },
+
+  { who: "mother", cat: "nutrition", title: "2–3 portions of low-mercury fish a week",
+    start: -26, end: 66,
+    when: "When you could become pregnant, during pregnancy and while breastfeeding.",
+    detail: "Fish gives protein and omega-3 fats for the baby's development. Choose lower-mercury fish (such as salmon, cod, pollock, sardines, shrimp, canned light tuna) and avoid shark, swordfish, marlin, king mackerel, orange roughy, bigeye tuna and Gulf tilefish. The NHS caps oily fish at 2 portions a week in pregnancy.",
+    sources: [SRC.fdaFish, SRC.nhsVitamins] },
+
+  { who: "mother", cat: "activity", title: "150 minutes a week of moderate activity",
+    start: -26, end: 66,
+    when: "Before, during and after pregnancy, if you have no complications.",
+    detail: "Moderate means your heart rate is up but you can still talk. Split it however suits you, for example 30 minutes on 5 days. If you're new to exercise, build up gradually. In pregnancy avoid overheating, contact sports, high fall-risk activities and, from the second trimester, exercises lying flat on your back.",
+    sources: [SRC.mtbExercise] },
+
+  { who: "mother", cat: "activity", title: "Daily pelvic floor exercises",
+    start: 0, end: 66,
+    when: "From early pregnancy and continuing after the birth.",
+    detail: "Pregnancy and birth stretch the muscles that support the bladder, bowel and womb. Doing long and short squeezes every day, ideally 3 times a day, helps prevent leaking urine during and after pregnancy.",
+    sources: [SRC.nhsPelvic] },
+
+  { who: "mother", cat: "vaccines", title: "Flu vaccine (if pregnant in flu season)",
+    start: 0, end: 40,
+    when: "Any trimester, whenever flu season overlaps your pregnancy.",
+    detail: "Pregnancy makes severe flu more likely, and the antibodies help protect the baby for its first months. Have the injection, not the nasal spray.",
+    sources: [SRC.cdcFlu] },
+
+  { who: "mother", cat: "vaccines", title: "Whooping cough vaccine (Tdap)",
+    softStart: 20, start: 27, end: 36,
+    when: "US (CDC): weeks 27–36, ideally early in that window. UK (NHS): offered from week 16, ideally weeks 20–32 (the faded part).",
+    detail: "One dose in every pregnancy. Antibodies cross the placenta and protect the baby until its own vaccinations start at around 8 weeks old.",
+    sources: [SRC.cdcTdap, SRC.govukVacc] },
+
+  { who: "mother", cat: "vaccines", title: "RSV vaccine",
+    softStart: 28, start: 32, end: 37,
+    when: "US (CDC): weeks 32–36 (up to 36 weeks 6 days), given September–January. UK (NHS): from week 28 (the faded part).",
+    detail: "A single dose of the maternal RSV vaccine protects the baby through its first RSV season. The alternative is an antibody injection for the baby after birth; most babies need one or the other, not both.",
+    sources: [SRC.cdcRsv, SRC.govukVacc] },
+
+  { who: "mother", cat: "checks", title: "Low-dose aspirin (high pre-eclampsia risk only)",
+    start: 12, end: 36, softEnd: 40, conditional: true,
+    when: "From after week 12, usually until late pregnancy — only if prescribed.",
+    detail: "For people at high risk of pre-eclampsia (for example a previous pre-eclampsia, chronic high blood pressure, diabetes, kidney or autoimmune disease, or twins), daily low-dose aspirin lowers the risk of pre-eclampsia, preterm birth and growth restriction. Don't start it without your doctor.",
+    sources: [SRC.uspstfAspirin, SRC.uspstfAspirin21] },
+
+  { who: "mother", cat: "checks", title: "Gestational diabetes screening",
+    start: 24, end: 28,
+    when: "Weeks 24–28 (earlier if you have risk factors).",
+    detail: "A glucose test finds gestational diabetes, which can then be treated to reduce complications for mother and baby.",
+    sources: [SRC.uspstfGdm] },
+
+  { who: "mother", cat: "lifestyle", title: "Go to sleep on your side",
+    start: 28, end: 40,
+    when: "From week 28 until the birth.",
+    detail: "Going to sleep on your back in late pregnancy is linked to a higher risk of stillbirth. Settle on either side for night sleep and naps; if you wake up on your back, just roll over.",
+    sources: [SRC.nswSleep] },
+
+  /* ------------------------------ FATHER ------------------------------ */
+  { who: "father", cat: "checks", title: "Health check-up and STI test",
+    start: -26, end: -13,
+    when: "A few months before trying — new sperm take about 3 months to develop.",
+    detail: "Talk to a doctor about long-term conditions and medicines that can affect sperm (the effect of some long-term antibiotics wears off around 3 months after stopping), and get tested for sexually transmitted infections.",
+    sources: [SRC.tommysMale, SRC.yourFertility, SRC.nhsDad] },
+
+  { who: "father", cat: "avoid", title: "Stop smoking; keep home and car smoke-free",
+    start: -26, end: 66,
+    when: "Before trying, through the pregnancy and after the birth.",
+    detail: "Smoking affects sperm quality. During pregnancy, second-hand smoke carries many of the same risks for the baby as the mother smoking, and smoke around a newborn raises the risk of sudden infant death and breathing problems.",
+    sources: [SRC.nhsDad, SRC.nhsTogether] },
+
+  { who: "father", cat: "avoid", title: "Cut down alcohol: ≤14 units a week, no binges",
+    start: -13, end: 2,
+    when: "From at least 3 months before trying until conception, since sperm take about that long to develop.",
+    detail: "Heavy drinking lowers sperm quality and testosterone. UK guidance is no more than 14 units a week spread over 3 or more days; NICE says staying within that is unlikely to affect semen quality.",
+    note: "For fathers, official guidance is moderation rather than total abstinence. Many partners go alcohol-free during the pregnancy to support the mother — a personal choice rather than a medical requirement.",
+    sources: [SRC.nhsDad, SRC.nice] },
+
+  { who: "father", cat: "avoid", title: "No cannabis, cocaine or anabolic steroids",
+    start: -13, end: 2,
+    when: "From at least 3 months before trying until conception.",
+    detail: "These drugs are known to damage sperm quality and reduce male fertility.",
+    sources: [SRC.nhsDad] },
+
+  { who: "father", cat: "lifestyle", title: "Keep the testicles cool",
+    start: -13, end: 2,
+    when: "From about 3 months before and while trying.",
+    detail: "Sperm production works best slightly below body temperature. Take breaks outside if you work somewhere hot, get up and move if you sit for long periods, and consider loose underwear.",
+    note: "NICE notes the link between higher scrotal temperature and lower semen quality, but says it's uncertain whether loose underwear improves fertility.",
+    sources: [SRC.nhsDad, SRC.nice] },
+
+  { who: "father", cat: "lifestyle", title: "Healthy weight, diet and exercise",
+    start: -26, end: 2,
+    when: "In the months before trying.",
+    detail: "A BMI above about 29–30 may reduce fertility. A balanced diet (plenty of fruit and vegetables, wholegrains, some fish) plus regular exercise helps keep sperm in good condition.",
+    sources: [SRC.nhsDad, SRC.nice] },
+
+  { who: "father", cat: "lifestyle", title: "Manage stress",
+    start: -13, end: 2,
+    when: "While preparing and trying.",
+    detail: "Severe stress may limit sperm production and lower sex drive for both partners. Taking steps to relax and reduce stress helps.",
+    sources: [SRC.nhsDad] },
+
+  { who: "father", cat: "vaccines", title: "Whooping cough booster (Tdap)",
+    start: 27, end: 38,
+    when: "In late pregnancy — at least 2 weeks before the baby arrives.",
+    detail: "Babies most often catch whooping cough from someone at home and can't be vaccinated themselves until about 2 months old. Parents, siblings, grandparents and carers should be up to date at least 2 weeks before meeting the baby, as antibodies take about 2 weeks to develop.",
+    sources: [SRC.cdcFamily] },
+
+  { who: "father", cat: "vaccines", title: "Flu vaccine (if birth falls in flu season)",
+    start: 24, end: 38,
+    when: "During flu season, at least 2 weeks before meeting the baby.",
+    detail: "Babies under 6 months can't have a flu vaccine, so the people around them being vaccinated helps protect them.",
+    sources: [SRC.cdcFamily] },
+];
+
+/* =====================================================================
+   APP
+   ===================================================================== */
+const AXIS = { min: -26, max: 66 };
+const WEEKS_PER_MONTH = 4.345;
+const STORE_KEY = "pregnancy-timeline:v1";
+const pct = w => ((w - AXIS.min) / (AXIS.max - AXIS.min)) * 100;
+
+const state = {
+  who: "mother",
+  hidden: new Set(),
+  anchorType: "due",
+  anchorDate: "",
+};
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+    if (s.anchorType) state.anchorType = s.anchorType;
+    if (s.anchorDate) state.anchorDate = s.anchorDate;
+  } catch (e) {}
+  try {
+    const h = location.hash.replace("#", "");
+    if (h === "mother" || h === "father") state.who = h;
+  } catch (e) {}
+}
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({ anchorType: state.anchorType, anchorDate: state.anchorDate }));
+  } catch (e) {}
+}
+
+/* ---- dates ---- */
+const DAY = 86400000;
+function week0() {
+  if (!state.anchorDate) return null;
+  const d = new Date(state.anchorDate + "T12:00:00");
+  if (isNaN(d)) return null;
+  if (state.anchorType === "due") return new Date(d - 280 * DAY);
+  if (state.anchorType === "conception") return new Date(d - 14 * DAY);
+  // start of trying: chart assumes ~13 weeks of trying before week 0
+  return new Date(+d + 13 * 7 * DAY);
+}
+const fmt = d => d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+const weekToDate = w => new Date(+week0() + w * 7 * DAY);
+function dateRange(it) {
+  if (!week0()) return "";
+  const s = it.softStart ?? it.start;
+  const e = it.softEnd ?? it.end;
+  return `${fmt(weekToDate(s))} – ${fmt(weekToDate(e))}`;
+}
+
+/* ---- dom helpers ---- */
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v;
+    else if (k === "style") n.setAttribute("style", v);
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+  return n;
+}
+const extIcon = () => {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("viewBox", "0 0 12 12"); s.setAttribute("aria-hidden", "true");
+  s.innerHTML = '<path d="M4 2h6v6M10 2 3 9" fill="none" stroke="currentColor" stroke-width="1.6"/>';
+  return s;
+};
+
+/* ---- filters ---- */
+function renderFilters() {
+  const box = document.getElementById("filters");
+  box.textContent = "";
+  const present = new Set(ITEMS.filter(i => i.who === state.who).map(i => i.cat));
+  for (const [key, c] of Object.entries(CATEGORIES)) {
+    if (!present.has(key)) continue;
+    box.append(el("button", {
+      class: "chip", type: "button", "aria-pressed": String(!state.hidden.has(key)),
+      style: `--c: var(--c-${key})`,
+      onclick: () => { state.hidden.has(key) ? state.hidden.delete(key) : state.hidden.add(key); renderFilters(); renderChart(); }
+    }, el("span", { class: "dot" }), c.label));
+  }
+}
+
+/* ---- chart ---- */
+function axisRows() {
+  const rows = [];
+  // phases
+  const phase = el("div", { class: "row axis phase", role: "row" },
+    el("div", { class: "cell-label", role: "rowheader" }, "Phase"),
+    el("div", { class: "cell-track" },
+      band(-26, 0, "Before pregnancy", "pre"),
+      band(0, 40, "Pregnancy", "preg"),
+      band(40, 66, "After birth", "post")));
+  rows.push(phase);
+  // trimesters
+  rows.push(el("div", { class: "row axis tri", role: "row" },
+    el("div", { class: "cell-label", role: "rowheader" }, "Trimester"),
+    el("div", { class: "cell-track" },
+      band(0, 13, "1st", ""), band(13, 27, "2nd", ""), band(27, 40, "3rd", ""))));
+  // ticks
+  const ticks = el("div", { class: "cell-track" });
+  for (let m = 5; m >= 1; m--) ticks.append(tick(-m * WEEKS_PER_MONTH, `−${m} mo`));
+  for (let w = 0; w <= 40; w += 4) ticks.append(tick(w, w === 0 ? "wk 0" : String(w)));
+  for (let m = 1; m <= 5; m++) ticks.append(tick(40 + m * WEEKS_PER_MONTH, `+${m} mo`));
+  rows.push(el("div", { class: "row axis ticks", role: "row" },
+    el("div", { class: "cell-label", role: "rowheader" }, "Months · weeks"), ticks));
+  // calendar
+  if (week0()) {
+    const cal = el("div", { class: "cell-track" });
+    const start = weekToDate(AXIS.min), end = weekToDate(AXIS.max);
+    let d = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    while (d < end) {
+      const w = (d - week0()) / (7 * DAY);
+      const label = d.toLocaleDateString(undefined, { month: "short" });
+      cal.append(el("div", { class: "tick", style: `left:${pct(w)}%` },
+        label, d.getMonth() === 0 || +d === +new Date(start.getFullYear(), start.getMonth() + 1, 1) ? el("b", {}, String(d.getFullYear())) : null));
+      d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+    }
+    rows.splice(3, 0, el("div", { class: "row axis cal", role: "row" },
+      el("div", { class: "cell-label", role: "rowheader" }, "Calendar"), cal));
+  }
+  return rows;
+}
+function band(a, b, text, cls) {
+  return el("div", { class: `band ${cls}`, style: `left:${pct(a)}%;width:${pct(b) - pct(a)}%` }, text);
+}
+function tick(w, text) {
+  return el("div", { class: "tick", style: `left:${pct(w)}%` }, text);
+}
+
+function overlay() {
+  const o = el("div", { class: "overlay", "aria-hidden": "true" });
+  for (let m = 6; m >= 1; m--) o.append(el("div", { class: "vline", style: `left:${pct(-m * WEEKS_PER_MONTH)}%` }));
+  for (let w = 4; w < 40; w += 4) o.append(el("div", { class: "vline", style: `left:${pct(w)}%` }));
+  for (let m = 1; m <= 5; m++) o.append(el("div", { class: "vline", style: `left:${pct(40 + m * WEEKS_PER_MONTH)}%` }));
+  o.append(el("div", { class: "vline phase-edge", style: `left:${pct(0)}%` }));
+  o.append(el("div", { class: "vline marker", style: `left:${pct(2)}%` }));
+  o.append(el("div", { class: "vline marker solid", style: `left:${pct(40)}%` }));
+  const tw = todayWeek();
+  if (tw != null) o.append(el("div", { class: "vline today", style: `left:${pct(tw)}%` }));
+  return o;
+}
+function todayWeek() {
+  if (!week0()) return null;
+  const tw = (Date.now() - week0()) / (7 * DAY);
+  return tw >= AXIS.min && tw <= AXIS.max ? tw : null;
+}
+function markerRow() {
+  const t = el("div", { class: "cell-track" },
+    el("div", { class: "flag-tick", style: `left:${pct(2)}%` }, "Conception ≈ wk 2"),
+    el("div", { class: "flag-tick right", style: `left:${pct(40)}%` }, "Due date"));
+  const tw = todayWeek();
+  if (tw != null) {
+    const where = tw < 0 ? "" : tw < 40 ? ` · week ${Math.floor(tw)}` : "";
+    t.append(el("div", { class: "flag-tick today" + (tw > 52 ? " right" : ""), style: `left:${pct(tw)}%` }, "Today" + where));
+  }
+  return el("div", { class: "row axis markers" + (tw != null ? " has-today" : ""), role: "row" },
+    el("div", { class: "cell-label", role: "rowheader" }, "Markers"), t);
+}
+
+function itemRow(it) {
+  const c = `--c: var(--c-${it.cat})`;
+  const label = el("div", { class: "cell-label", role: "rowheader" },
+    el("button", { class: "item-title", type: "button", onclick: () => openDetail(it) }, it.title),
+    el("a", { class: "item-src", href: it.sources[0].url, target: "_blank", rel: "noopener",
+      title: it.sources[0].name }, it.sources[0].short, extIcon()));
+
+  const track = el("div", { class: "cell-track", role: "cell" });
+  const wrap = el("div", { class: "bar-wrap", style: `${c};left:0;right:0` });
+  if (it.softStart != null) wrap.append(el("div", { class: "soft start",
+    style: `left:${pct(it.softStart)}%;width:${pct(it.start) - pct(it.softStart)}%` }));
+  if (it.softEnd != null) wrap.append(el("div", { class: "soft end",
+    style: `left:${pct(it.end)}%;width:${pct(it.softEnd) - pct(it.end)}%` }));
+  const tip = [it.when, dateRange(it)].filter(Boolean).join("\n");
+  wrap.append(el("button", {
+    class: "bar" + (it.conditional ? " conditional" : ""), type: "button",
+    style: `left:${pct(it.start)}%;width:${pct(it.end) - pct(it.start)}%`,
+    title: tip, "aria-label": `${it.title}. ${it.when}`,
+    onclick: () => openDetail(it)
+  }));
+  track.append(wrap);
+  return el("div", { class: "row", role: "row" }, label, track);
+}
+
+function renderChart() {
+  const chart = document.getElementById("chart");
+  chart.textContent = "";
+  const items = ITEMS
+    .filter(i => i.who === state.who && !state.hidden.has(i.cat))
+    .sort((a, b) => ((a.softStart ?? a.start) - (b.softStart ?? b.start)) || (a.start - b.start) || (a.end - b.end));
+  chart.append(...axisRows());
+  if (!items.length) {
+    chart.append(el("div", { class: "empty" }, "No measures match the selected categories. Turn a category back on above."));
+  } else {
+    for (const it of items) chart.append(itemRow(it));
+  }
+  chart.append(markerRow());
+  chart.append(overlay());
+  requestAnimationFrame(fitBarLabels);
+}
+
+function fitBarLabels() {
+  document.querySelectorAll(".bar").forEach(b => {
+    b.classList.remove("nolabel");
+    const t = b.querySelector(".bar-text");
+    if (t && t.scrollWidth > b.clientWidth - 14) b.classList.add("nolabel");
+  });
+}
+
+/* ---- detail dialog ---- */
+const dlg = document.getElementById("detail");
+function openDetail(it) {
+  document.getElementById("dlg").style.setProperty("--c", `var(--c-${it.cat})`);
+  document.getElementById("dlg-cat").textContent = CATEGORIES[it.cat].label + (state.who === "mother" ? " · Mother" : " · Father");
+  document.getElementById("dlg-title").textContent = it.title;
+  const when = document.getElementById("dlg-when");
+  when.textContent = it.when;
+  const dr = dateRange(it);
+  if (dr) when.append(el("span", { class: "dates" }, dr));
+  const body = document.getElementById("dlg-body");
+  body.textContent = "";
+  if (it.conditional) body.append(el("p", { class: "cond-flag" }, "Only if your doctor advises it."));
+  body.append(el("p", {}, it.detail));
+  if (it.note) body.append(el("p", { class: "note" }, it.note));
+  const list = document.getElementById("dlg-sources");
+  list.textContent = "";
+  for (const s of it.sources) list.append(el("li", {}, el("a", { href: s.url, target: "_blank", rel: "noopener" }, s.name)));
+  if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+}
+document.getElementById("dlg-close").addEventListener("click", () => dlg.close());
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+/* ---- tabs ---- */
+function setWho(who, push = true) {
+  state.who = who;
+  state.hidden.clear();
+  document.querySelectorAll(".who button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.who === who)));
+  renderFilters();
+  renderChart();
+  if (push) updateHash(who);
+}
+// Keep the URL in sync (#mother / #father) where the browser allows it.
+// Sandboxed previews (e.g. srcdoc iframes) block this, so failures are ignored.
+function updateHash(who) {
+  try { history.replaceState(null, "", "#" + who); }
+  catch (e) { try { location.hash = who; } catch (e2) {} }
+}
+document.querySelectorAll(".who button").forEach(b => b.addEventListener("click", () => setWho(b.dataset.who)));
+document.querySelector(".who").addEventListener("keydown", e => {
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  const next = state.who === "mother" ? "father" : "mother";
+  setWho(next);
+  document.getElementById("tab-" + next).focus();
+});
+window.addEventListener("hashchange", () => {
+  const h = location.hash.replace("#", "");
+  if ((h === "mother" || h === "father") && h !== state.who) setWho(h, false);
+});
+
+/* ---- date controls ---- */
+const typeSel = document.getElementById("anchor-type");
+const dateIn = document.getElementById("anchor-date");
+const clearBtn = document.getElementById("anchor-clear");
+function syncDateControls() {
+  typeSel.value = state.anchorType;
+  dateIn.value = state.anchorDate;
+  clearBtn.hidden = !state.anchorDate;
+}
+typeSel.addEventListener("change", () => { state.anchorType = typeSel.value; save(); renderChart(); });
+dateIn.addEventListener("change", () => { state.anchorDate = dateIn.value; clearBtn.hidden = !dateIn.value; save(); renderChart(); });
+clearBtn.addEventListener("click", () => { state.anchorDate = ""; syncDateControls(); save(); renderChart(); });
+
+let rt;
+window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(fitBarLabels, 120); });
+
+/* ---- init ---- */
+load();
+syncDateControls();
+setWho(state.who, false);
+</script>
+</body>
+</html>
