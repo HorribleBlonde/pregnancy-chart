@@ -221,6 +221,10 @@ select, input[type="date"], .btn-plain {
   outline: 1.5px dashed var(--c); outline-offset: 1px;
 }
 .bar.conditional .bar-text { background: var(--c); padding: 0 5px; border-radius: 4px; }
+.bar.optional {
+  background: color-mix(in srgb, var(--c) 22%, var(--surface));
+  outline: 2px dotted var(--c); outline-offset: -2px;
+}
 .soft {
   position: absolute; top: 3px; bottom: 3px; pointer-events: none; opacity: .55;
 }
@@ -237,6 +241,7 @@ select, input[type="date"], .btn-plain {
 .swatch.solid { background: var(--c); }
 .swatch.fade { background: linear-gradient(to right, transparent, var(--c)); opacity: .55; }
 .swatch.cond { background: repeating-linear-gradient(-45deg, var(--c) 0 6px, transparent 6px 11px); outline: 1.5px dashed var(--c); outline-offset: 1px; }
+.swatch.opt { background: color-mix(in srgb, var(--c) 22%, transparent); outline: 2px dotted var(--c); outline-offset: -2px; }
 .swatch.line { width: 44px; height: 16px; background: none; }
 .swatch.line::after { content: ""; position: absolute; left: 21px; top: -2px; bottom: -2px; border-left: 2px dashed var(--marker); opacity: .6; }
 .notes { font-size: .9rem; color: var(--muted); }
@@ -264,6 +269,7 @@ dialog::backdrop { background: rgba(14, 18, 28, .45); }
 .dlg p { margin: 0 0 12px; }
 .dlg .note { border-left: 3px solid var(--c); padding-left: 12px; color: var(--muted); font-size: .92rem; }
 .dlg .cond-flag { font-weight: 700; color: var(--c-avoid); }
+.dlg .opt-flag { font-weight: 700; color: var(--muted); }
 .dlg h3 { font: 700 .95rem var(--font-display); margin: 18px 0 6px; }
 .dlg ul { margin: 0; padding-left: 18px; }
 .dlg li { margin-bottom: 4px; }
@@ -332,6 +338,7 @@ dialog::backdrop { background: rgba(14, 18, 28, .45); }
       <div><span class="swatch solid"></span>Recommended window</div>
       <div><span class="swatch fade"></span>Start earlier if you can, or an alternative window used in some countries</div>
       <div><span class="swatch cond"></span>Only if your doctor advises it</div>
+      <div><span class="swatch opt"></span>Optional — evidence is limited or mixed</div>
       <div><span class="swatch line"></span>Conception (≈ week 2) and due date (week 40)</div>
     </div>
     <div class="notes">
@@ -373,6 +380,7 @@ dialog::backdrop { background: rgba(14, 18, 28, .45); }
      softStart    optional faded lead-in ("start earlier if you can" / alternative window)
      softEnd      optional faded tail
      conditional  true = only if a doctor advises it (hatched)
+     optional     true = evidence limited or mixed (pale, dotted outline)
      when         plain-language timing shown in the details
      sources      first one is shown under the title in the chart
    ===================================================================== */
@@ -405,6 +413,19 @@ const SRC = {
   uspstfAspirin21:{ name: "AAFP — USPSTF reaffirms low-dose aspirin recommendation (2021)", short: "AAFP", url: "https://www.aafp.org/about/news/20211007uspstfpreeclampsia" },
   uspstfGdm:     { name: "USPSTF — Screening for gestational diabetes (AAFP summary)", short: "USPSTF", url: "https://www.aafp.org/afp/2014/1201/od1" },
   nswSleep:      { name: "NSW Health — Maternal sleep position in late pregnancy", short: "NSW Health", url: "https://www.health.nsw.gov.au/kidsfamilies/MCFhealth/maternity/Pages/side-sleeping-clinicians.aspx" },
+  bahnfleth:     { name: "Bahnfleth et al. (2022), FASEB Journal — Prenatal choline supplementation improves child sustained attention", short: "Bahnfleth 2022", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9303951/" },
+  bahnflethNews: { name: "Cornell University — Summary of the Bahnfleth et al. choline study", short: "Cornell", url: "https://news.cornell.edu/node/323212" },
+  odsPregnancy:  { name: "NIH Office of Dietary Supplements — Dietary supplements and pregnancy (choline section)", short: "NIH ODS", url: "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/" },
+  infantRisk:    { name: "InfantRisk Center — Choline during pregnancy and lactation", short: "InfantRisk", url: "https://infantrisk.com/content/choline-during-pregnancy-lactation" },
+  valentine:     { name: "Valentine et al. (2024), Med — PPaX trial of xylitol gum (UW Medicine summary)", short: "Valentine 2024", url: "https://newsroom.uw.edu/news-releases/chewing-xylitol-gum-linked-to-decrease-in-preterm-birth" },
+  valentineEmj:  { name: "EMJ — Results summary of the PPaX xylitol trial", short: "EMJ", url: "https://www.emjreviews.com/reproductive-health/news/chewing-gum-reduces-risk-of-preterm-birth" },
+  nhsVitD:       { name: "NHS — Vitamin D (advice for all adults)", short: "NHS", url: "https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-d/" },
+  taniaVitD:     { name: "Tania et al. (2023), Arab Journal of Urology — Vitamin D and sperm parameters, meta-analysis of 5 RCTs", short: "Tania 2023", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10763592" },
+  hosseiniO3:    { name: "Hosseini et al. (2019), J Dietary Supplements — Omega-3 and male infertility, meta-analysis of 3 RCTs", short: "Hosseini 2019", url: "https://nutrition-evidence.com/article/293419/the-effect-of-omega-3-fatty-acids-epa-andor-dha-on-male-infertility-a-systematic-review-and-meta-analysis" },
+  fazst:         { name: "NICHD — Folic Acid and Zinc Supplementation Trial (FAZST) results", short: "FAZST", url: "https://www.nichd.nih.gov/about/org/diphr/officebranch/eb/folic-acid-zinc" },
+  fazstJama:     { name: "Schisterman et al. (2020), JAMA — FAZST trial", short: "JAMA", url: "https://jamanetwork.com/journals/jama/article-abstract/2758450" },
+  cochraneAntiox:{ name: "Cochrane (2022) — Antioxidants for male subfertility", short: "Cochrane", url: "https://www.cochrane.org/CD007411/MENSTR_antioxidants-subfertile-male" },
+  niceMale:      { name: "NICE NG257 — Management of male factor fertility problems (rec. 1.24.6)", short: "NICE", url: "https://www.nice.org.uk/guidance/ng257/chapter/Management-of-male-factor-fertility-problems" },
   modCheckup:    { name: "March of Dimes — Preconception checkups: why they're important", short: "March of Dimes", url: "https://marchofdimes.org/find-support/blog/preconception-checkups-why-theyre-important" },
 };
 
@@ -469,6 +490,13 @@ const ITEMS = [
     note: "Advice differs by country — the NHS, for example, doesn't routinely recommend an iodine supplement. Check with your doctor, particularly if you have a thyroid condition.",
     sources: [SRC.ataIodine, SRC.ataIodine3m] },
 
+  { who: "mother", cat: "supplements", title: "Choline 450 mg a day (550 mg breastfeeding)",
+    start: 0, end: 66,
+    when: "Throughout pregnancy (450 mg/day) and breastfeeding (550 mg/day), from food plus a supplement if your diet falls short.",
+    detail: "Choline supports the baby's brain development. Eggs are the richest everyday source (about 150 mg per large egg), followed by meat, fish, dairy and soy. Most pregnant women eat less than the recommended amount, and most prenatal vitamins contain little or none, so check the label. In Bahnfleth et al.'s feeding trial, children of mothers who had about double the recommended intake (930 vs 480 mg/day) in the third trimester showed better sustained attention at age 7.",
+    note: "The 450/550 mg figures are official US intake targets. Taking more than that is based on one small trial; no professional body currently recommends routine high-dose choline supplements. Stay below the upper limit of 3,500 mg a day.",
+    sources: [SRC.bahnfleth, SRC.bahnflethNews, SRC.odsPregnancy, SRC.infantRisk] },
+
   { who: "mother", cat: "supplements", title: "Vitamin D 10 µg (400 IU) daily",
     softStart: -13, start: 0, end: 66,
     when: "During pregnancy and breastfeeding — the NHS says at least September to March, or all year if you have dark skin or rarely get sun. Tommy's suggests taking it while trying, too.",
@@ -510,6 +538,13 @@ const ITEMS = [
     when: "From early pregnancy and continuing after the birth.",
     detail: "Pregnancy and birth stretch the muscles that support the bladder, bowel and womb. Doing long and short squeezes every day, ideally 3 times a day, helps prevent leaking urine during and after pregnancy.",
     sources: [SRC.nhsPelvic] },
+
+  { who: "mother", cat: "lifestyle", title: "Xylitol chewing gum twice a day",
+    start: 8, end: 40, optional: true,
+    when: "From early pregnancy until the birth. Trial participants started before week 20 and chewed it twice daily.",
+    detail: "In the PPaX trial (Valentine et al., 2024) of about 10,000 pregnant women in Malawi, xylitol gum twice a day lowered preterm birth from 16.5% to 12.6%, and also reduced low birthweight and newborn deaths. The idea is that xylitol reduces gum disease, which is linked to preterm birth.",
+    note: "One trial, in a setting with high rates of gum disease and preterm birth; the effects were only just statistically significant, and follow-up of the children is due in 2027. It isn't in pregnancy guidelines yet and may matter less where dental care is good. The gum is low-risk, though large amounts of xylitol can cause bloating or diarrhoea — and xylitol is very toxic to dogs.",
+    sources: [SRC.valentine, SRC.valentineEmj] },
 
   { who: "mother", cat: "vaccines", title: "Flu vaccine (if pregnant in flu season)",
     start: 0, end: 40,
@@ -591,6 +626,27 @@ const ITEMS = [
     when: "While preparing and trying.",
     detail: "Severe stress may limit sperm production and lower sex drive for both partners. Taking steps to relax and reduce stress helps.",
     sources: [SRC.nhsDad] },
+
+  { who: "father", cat: "supplements", title: "Vitamin D 10 µg (400 IU) daily",
+    start: -13, end: 2,
+    when: "From about 3 months before trying until conception — NHS advice is to take it every autumn and winter anyway.",
+    detail: "The NHS advises all adults to consider 10 µg a day from roughly October to March, and all year for people with dark skin or little sun exposure. For sperm specifically, a meta-analysis of 5 small trials in infertile men found better motility and shape with vitamin D, but no change in count, and it didn't look at pregnancy rates.",
+    note: "Don't exceed 100 µg (4,000 IU) a day.",
+    sources: [SRC.nhsVitD, SRC.taniaVitD] },
+
+  { who: "father", cat: "supplements", title: "Omega-3: oily fish weekly, supplement optional",
+    start: -13, end: 2, optional: true,
+    when: "From about 3 months before trying (one full sperm cycle) until conception.",
+    detail: "Eating fish, including oily fish, is part of the healthy diet the NHS recommends for sperm health. A meta-analysis of 3 small trials in infertile men found omega-3 (DHA/EPA) supplements improved sperm motility but not sperm count, and none reported pregnancy or birth outcomes.",
+    note: "Evidence for supplements is limited. Antioxidant-type supplements for men overall were judged inconclusive by Cochrane in 2022.",
+    sources: [SRC.hosseiniO3, SRC.nhsDad, SRC.cochraneAntiox] },
+
+  { who: "father", cat: "supplements", title: "Folate and zinc: from food, not high-dose pills",
+    start: -13, end: 2, optional: true,
+    when: "From about 3 months before trying until conception.",
+    detail: "Folate (leafy greens, beans, fortified cereals) and zinc (meat, shellfish, dairy, nuts, seeds) are part of a balanced diet. But in the largest trial (FAZST, 2,370 men), 6 months of 5 mg folic acid plus 30 mg zinc did not improve semen quality or live births — and men taking it had more sperm DNA damage and more stomach upsets.",
+    note: "NICE (2026) says not to offer supplements or antioxidants to improve sperm DNA integrity. Low-dose combined men's multivitamins weren't tested in FAZST; if you take one, there's no strong evidence either way.",
+    sources: [SRC.fazst, SRC.fazstJama, SRC.niceMale] },
 
   { who: "father", cat: "vaccines", title: "Whooping cough booster (Tdap)",
     start: 27, end: 38,
@@ -784,7 +840,7 @@ function itemRow(it) {
     style: `left:${pct(it.end)}%;width:${pct(it.softEnd) - pct(it.end)}%` }));
   const tip = [it.when, dateRange(it)].filter(Boolean).join("\n");
   wrap.append(el("button", {
-    class: "bar" + (it.conditional ? " conditional" : ""), type: "button",
+    class: "bar" + (it.conditional ? " conditional" : "") + (it.optional ? " optional" : ""), type: "button",
     style: `left:${pct(it.start)}%;width:${pct(it.end) - pct(it.start)}%`,
     title: tip, "aria-label": `${it.title}. ${it.when}`,
     onclick: () => openDetail(it)
@@ -831,6 +887,7 @@ function openDetail(it) {
   const body = document.getElementById("dlg-body");
   body.textContent = "";
   if (it.conditional) body.append(el("p", { class: "cond-flag" }, "Only if your doctor advises it."));
+  if (it.optional) body.append(el("p", { class: "opt-flag" }, "Optional — the evidence is limited or mixed."));
   body.append(el("p", {}, it.detail));
   if (it.note) body.append(el("p", { class: "note" }, it.note));
   const list = document.getElementById("dlg-sources");
